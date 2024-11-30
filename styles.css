@@ -507,6 +507,7 @@ footer p {
 
   .menu-toggle {
     display: block; /* Show the hamburger icon */
+    color: red;
   }
 
   .nav-links.show {
