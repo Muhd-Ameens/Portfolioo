@@ -1,0 +1,56 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Site{% endblock %}</title>
+    <!-- Add your dark/light mode styles -->
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body class="{% if request.COOKIES.theme == 'dark' %}dark{% else %}light{% endif %}">
+    <header>
+        <!-- Dark mode toggle -->
+        <button id="theme-toggle" class="theme-toggle">
+            <i id="theme-icon" class="moon"></i>
+        </button>
+    </header>
+    
+    {% block content %}
+    {% endblock %}
+
+    <script>
+        // Toggle dark mode
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const body = document.body;
+
+        // Set initial icon based on current theme
+        if (body.classList.contains('dark')) {
+            themeIcon.className = 'sun';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            // Toggle the theme class
+            body.classList.toggle('dark');
+            body.classList.toggle('light');
+
+            // Update the icon
+            if (body.classList.contains('dark')) {
+                themeIcon.className = 'sun';
+                setCookie('theme', 'dark', 365);
+            } else {
+                themeIcon.className = 'moon';
+                setCookie('theme', 'light', 365);
+            }
+        });
+
+        // Helper to set cookies
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+        }
+    </script>
+</body>
+</html>
